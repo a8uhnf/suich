@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/ghodss/yaml"
@@ -29,7 +31,13 @@ func SwitchCmd() *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			
+			c := exec.Command("kubectl", "config", "use-context", selectedCtx)
+			var out bytes.Buffer
+			c.Stdout = &out
+			err = c.Run()
+			if err != nil {
+				log.Fatalln(err)
+			}
 		},
 	}
 }
