@@ -17,5 +17,6 @@ func RootCmd() *cobra.Command {
 	}
 
 	cmds.AddCommand(SwitchCmd())
+	cmds.AddCommand(ChangeKubectl())
 	return cmds
 }
