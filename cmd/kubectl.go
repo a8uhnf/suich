@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os/exec"
 	"strings"
 
@@ -72,6 +73,7 @@ func (k *Kubectl) Downloads(cmd *cobra.Command) error {
 	c.Stdout = &out
 	err = c.Run()
 	fmt.Println("**********************", string(out.Bytes()))
+	log.Printf("Moving to: %s", string(out.Bytes()))
 	if err != nil {
 		return err
 	}
