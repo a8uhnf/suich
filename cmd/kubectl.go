@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -57,7 +58,9 @@ func (k *Kubectl) Downloads(cmd *cobra.Command) error {
 	fmt.Println("--------", url)
 	c = exec.Command("curl", "-LO", url)
 	// c.Stdout = &out
-	err = c.Run()
+	if _, err := os.Stat("./kubectl"); err == nil {
+		err = c.Run()
+	}
 	fmt.Println("**********************")
 	if err != nil {
 		return err
