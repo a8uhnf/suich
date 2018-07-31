@@ -58,12 +58,11 @@ func (k *Kubectl) Downloads(cmd *cobra.Command) error {
 	fmt.Println("--------", url)
 	c = exec.Command("curl", "-LO", url)
 	// c.Stdout = &out
-	if _, err := os.Stat("./kubectl"); err == nil {
+	if _, err := os.Stat("./kubectl"); err != nil {
 		err = c.Run()
-	}
-	fmt.Println("**********************")
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
 	}
 
 	c = exec.Command("chmod", "a+wx", "./kubectl")
@@ -81,12 +80,27 @@ func (k *Kubectl) Downloads(cmd *cobra.Command) error {
 		return err
 	}
 	dest := string(out.Bytes())
+	if dest != "/usr/local/bin/kubectl" {
+		dest = "/usr/local/bin/kubectl"
+	} else {
+		out.Reset()
+		c = exec.Command("chmod", "a+wx", dest)
+		c.Stderr = &out
+		err = c.Run()
+		if err != nil {
+			fmt.Println(string(out.Bytes()))
+			panic(err)
+		}
+	}
 
 	fmt.Println(dest)
-	out.Reset()
-	c = exec.Command("mv", "./kubectl", strings.Trim(dest, "\n"))
-	c.Stderr = &out
-	err = c.Run()
+	// c = exec.Command("mv", "./kubectl", strings.Trim(dest, "\n"))
+	// c.Stderr = &out
+	// err = c.Run()
+	err = os.Rename("kubectl", dest)
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println("**********************", string(out.Bytes()))
 	if err != nil {
 		return err
