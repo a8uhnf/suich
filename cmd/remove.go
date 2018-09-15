@@ -27,12 +27,22 @@ func RemoveContext() *cobra.Command {
 				log.Fatalln(err)
 			}
 
+			err = deleteClusterName(cmd, selectedCtx)
+			if err != nil {
+				panic(err)
+			}
+
+			err = deleteContext(cmd, selectedCtx)
+			if err != nil {
+				panic(err)
+			}
+
 			fmt.Println("----- ", selectedCtx)
 		},
 	}
 }
 
-func deleteClusterName(cmd *cobra.Command) error {
+func deleteClusterName(cmd *cobra.Command, name string) error {
 	out := bytes.NewBuffer([]byte{})
 	// errOut := bytes.NewBuffer([]byte{})
 	configAccess := clientcmd.NewDefaultPathOptions()
@@ -42,7 +52,7 @@ func deleteClusterName(cmd *cobra.Command) error {
 	}
 
 	args := cmd.Flags().Args()
-	if len(args) != 1 {
+	if len(args) == 1 {
 		cmd.Help()
 		return nil
 	}
@@ -52,7 +62,6 @@ func deleteClusterName(cmd *cobra.Command) error {
 		configFile = configAccess.GetExplicitFile()
 	}
 
-	name := args[0]
 	_, ok := config.Clusters[name]
 	if !ok {
 		return fmt.Errorf("cannot delete cluster %s, not in %s", name, configFile)
@@ -69,7 +78,7 @@ func deleteClusterName(cmd *cobra.Command) error {
 	return nil
 }
 
-func deleteContext(cmd *cobra.Command) error {
+func deleteContext(cmd *cobra.Command, name string) error {
 	out := bytes.NewBuffer([]byte{})
 	errOut := bytes.NewBuffer([]byte{})
 	configAccess := clientcmd.NewDefaultPathOptions()
@@ -79,7 +88,7 @@ func deleteContext(cmd *cobra.Command) error {
 	}
 
 	args := cmd.Flags().Args()
-	if len(args) != 1 {
+	if len(args) == 1 {
 		cmd.Help()
 		return nil
 	}
@@ -89,7 +98,6 @@ func deleteContext(cmd *cobra.Command) error {
 		configFile = configAccess.GetExplicitFile()
 	}
 
-	name := args[0]
 	_, ok := config.Contexts[name]
 	if !ok {
 		return fmt.Errorf("cannot delete context %s, not in %s", name, configFile)
