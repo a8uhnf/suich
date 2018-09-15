@@ -29,6 +29,10 @@
   name = "github.com/spf13/cobra"
   version = "0.0.3"
 
+[[override]]
+  name = "k8s.io/apimachinery"
+  version = "kubernetes-1.11.0"
+
 [prune]
   go-tests = true
   unused-packages = true

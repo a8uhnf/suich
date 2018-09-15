@@ -18,5 +18,6 @@ func RootCmd() *cobra.Command {
 
 	cmds.AddCommand(SwitchCmd())
 	cmds.AddCommand(ChangeKubectl())
+	cmds.AddCommand(RemoveContext())
 	return cmds
 }

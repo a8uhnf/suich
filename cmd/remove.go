@@ -3,7 +3,9 @@ package cmd
 import (
 
 	// k8s "k8s.io/kubernetes"
+	"bytes"
 	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 
@@ -11,8 +13,8 @@ import (
 )
 
 func RemoveContext() *cobra.Command {
-	return &cobra.Command {
-		Use: "rm",
+	return &cobra.Command{
+		Use:   "rm",
 		Short: "Remove context and cluster from kubeconfig",
 		Run: func(cmd *cobra.Command, args []string) {
 			ctxs, err := readKubeConfigFile()
@@ -24,13 +26,15 @@ func RemoveContext() *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
+
+			fmt.Println("----- ", selectedCtx)
 		},
 	}
 }
 
-
-
-func deleteClusterName() error {
+func deleteClusterName(cmd *cobra.Command) error {
+	out := bytes.NewBuffer([]byte{})
+	// errOut := bytes.NewBuffer([]byte{})
 	configAccess := clientcmd.NewDefaultPathOptions()
 	config, err := configAccess.GetStartingConfig()
 	if err != nil {
@@ -65,7 +69,10 @@ func deleteClusterName() error {
 	return nil
 }
 
-func deleteContext() error {
+func deleteContext(cmd *cobra.Command) error {
+	out := bytes.NewBuffer([]byte{})
+	errOut := bytes.NewBuffer([]byte{})
+	configAccess := clientcmd.NewDefaultPathOptions()
 	config, err := configAccess.GetStartingConfig()
 	if err != nil {
 		return err
