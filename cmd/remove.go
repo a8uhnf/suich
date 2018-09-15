@@ -26,6 +26,9 @@ func RemoveContext() *cobra.Command {
 			if err != nil {
 				log.Fatalln(err)
 			}
+			if selectedCtx == "" {
+				return
+			}
 
 			err = deleteClusterName(cmd, selectedCtx)
 			if err != nil {
