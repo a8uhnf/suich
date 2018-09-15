@@ -42,6 +42,7 @@ func SwitchCmd() *cobra.Command {
 	}
 }
 
+// readKubeConfigFile reads kubeconfig and return context list
 func readKubeConfigFile() ([]string, error) {
 	file, err := ioutil.ReadFile(kubeConfigPath)
 	if err != nil {
