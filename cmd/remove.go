@@ -15,10 +15,20 @@ func RemoveContext() *cobra.Command {
 		Use: "rm",
 		Short: "Remove context and cluster from kubeconfig",
 		Run: func(cmd *cobra.Command, args []string) {
-			
+			ctxs, err := readKubeConfigFile()
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			selectedCtx, err := runPrompt(ctxs)
+			if err != nil {
+				log.Fatalln(err)
+			}
 		},
 	}
 }
+
+
 
 func deleteClusterName() error {
 	configAccess := clientcmd.NewDefaultPathOptions()
