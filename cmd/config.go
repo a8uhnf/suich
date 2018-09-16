@@ -11,7 +11,7 @@ func ConfigCommand() *cobra.Command {
 		Use:   "config",
 		Short: "Get current config name",
 		Run: func(cmd *cobra.Command, args []string) {
-			log.Println("----afas Current Config ----XXgogogX --- goo ggoo ")
+			log.Println("----afas Current Config ----XXgogogX ---afafa goo ggoo ")
 		},
 	}
 }
