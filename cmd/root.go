@@ -12,12 +12,14 @@ func RootCmd() *cobra.Command {
 		Short: "Root command for switch context in k8s config",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Hello World!!!")
+			fmt.Println("Hello From Suich!!!")
 		},
 	}
 
 	cmds.AddCommand(SwitchCmd())
 	cmds.AddCommand(ChangeKubectl())
 	cmds.AddCommand(RemoveContext())
+	cmds.AddCommand(PortForward())
+	cmds.AddCommand(GCPConfigSwitch())
 	return cmds
 }
