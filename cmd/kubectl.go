@@ -21,15 +21,16 @@ func ChangeKubectl() *cobra.Command {
 			k := &Kubectl{}
 			err := k.Validate(cmd)
 			if err != nil {
-				panic(err)
+				return
 			}
 			err = k.Downloads(cmd)
 			if err != nil {
+				return
 				panic(err)
 			}
 		},
 	}
-	cmd.Flags().StringVarP(&version, "version", "v", "", "kubectl valid version")
+	cmd.Flags().StringVarP(&version, "version", "v", "v1.9.0", "kubectl valid version")
 	return cmd
 }
 
@@ -47,14 +48,14 @@ func (k *Kubectl) Downloads(cmd *cobra.Command) error {
 	v := cmd.Flag("version").Value.String()
 	// o, err := os.
 	var out bytes.Buffer
-	c := exec.Command("uname", "-o")
+	c := exec.Command("uname")
 	c.Stdout = &out
 	err := c.Run()
 	if err != nil {
 		return err
 	}
 	o := string(out.Bytes())
-	url := fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/%s/amd64/kubectl", v, strings.ToLower(strings.Trim(strings.Split(o, "/")[1], "\n")))
+	url := fmt.Sprintf("https://storage.googleapis.com/kubernetes-release/release/%s/bin/%s/amd64/kubectl", v, strings.ToLower(strings.Trim(o, "\n")))
 	fmt.Println("--------", url)
 	c = exec.Command("curl", "-LO", url)
 	// c.Stdout = &out
