@@ -12,7 +12,7 @@ func RootCmd() *cobra.Command {
 		Short: "Root command for switch context in k8s config",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Hello From Suich!!!")
+			fmt.Println("Suich: k8s swiss knife")
 		},
 	}
 
