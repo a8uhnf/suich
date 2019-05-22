@@ -6,10 +6,9 @@ import (
 
 	"fmt"
 
-	"github.com/spf13/cobra"
-
 	"github.com/a8uhnf/suich/pkg/api"
 	"github.com/a8uhnf/suich/pkg/utils"
+	"github.com/spf13/cobra"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -17,7 +16,7 @@ import (
 func PortForward() *cobra.Command {
 	return &cobra.Command{
 		Use:   "pf",
-		Short: "port-forward kubernetes pod.",
+		Short: "port-forward kubernetes pod.[IN PROGRESS]",
 		Run: func(cmd *cobra.Command, args []string) {
 			kClient := getKubernetesClient()
 			// if err != nil {
