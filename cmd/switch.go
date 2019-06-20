@@ -49,7 +49,7 @@ func readKubeConfigFile() ([]string, error) {
 		return nil, err
 	}
 	cfg := KubectlConfig{}
-	log.Println("Succeessfully read kube-config...")
+	log.Println("Successfully read kube-config...")
 
 	err = yaml.Unmarshal(file, &cfg)
 	if err != nil {
