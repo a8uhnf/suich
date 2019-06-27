@@ -98,3 +98,29 @@ Flags:
   -v, --version string   kubectl valid version (default "v1.9.0")
 ```
 2. `suich kubectl -v v1.10.0` this command will download kubectl `v1.10.0` and change your local `kubectl` version
+
+### Set context's deault namespace
+
+1. use `suich ns`
+2. select namespace from prompt and selected namespace will be set as default namespace.
+
+```console
+$ suich ns
+Use the arrow keys to navigate: ↓ ↑ → ← 
+? select namespace: 
+    default
+  ▸ namespace-1
+    namespace-2
+    namespace-3
+↓   namespace-4
+
+successfully changed default namespace to namespace-1
+```
+3. check if namespace is set to your selected namespace.
+```$xslt
+$ kubectl config get-contexts namespace-1
+---
+
+CURRENT   NAME                            CLUSTER                         AUTHINFO                        NAMESPACE
+*         cluster-1                       cluster-1                       cluster-1                       namespace-1
+```
