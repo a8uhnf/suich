@@ -20,5 +20,6 @@ func RootCmd() *cobra.Command {
 	cmds.AddCommand(PortForward())
 	cmds.AddCommand(GCPConfigSwitch())
 	cmds.AddCommand(SuichNamespaceCMD())
+	cmds.AddCommand(GetLogsCmd())
 	return cmds
 }

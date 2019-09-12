@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/a8uhnf/suich/pkg/utils"
 	"github.com/spf13/cobra"
 
 	"k8s.io/client-go/tools/clientcmd"
@@ -22,7 +23,7 @@ func RemoveContext() *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			selectedCtx, err := runPrompt(ctxs)
+			selectedCtx, err := utils.RunPrompt(ctxs, "Select Context")
 			if err != nil {
 				log.Fatalln(err)
 			}

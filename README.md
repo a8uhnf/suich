@@ -70,12 +70,12 @@ Use the arrow keys to navigate: ↓ ↑ → ←
 
 1. `suich rm `
 
-2. select cluster with up/down arrow key 
+2. select cluster with up/down arrow key
 
 ```
 2019/05/22 23:51:00 Successfully read kube-config...
-Use the arrow keys to navigate: ↓ ↑ → ← 
-? Select context: 
+Use the arrow keys to navigate: ↓ ↑ → ←
+? Select context:
   ▸ cluster-1
     cluster-2
     cluster-3
@@ -106,8 +106,8 @@ Flags:
 
 ```console
 $ suich ns
-Use the arrow keys to navigate: ↓ ↑ → ← 
-? select namespace: 
+Use the arrow keys to navigate: ↓ ↑ → ←
+? select namespace:
     default
   ▸ namespace-1
     namespace-2
@@ -123,4 +123,24 @@ $ kubectl config get-contexts namespace-1
 
 CURRENT   NAME                            CLUSTER                         AUTHINFO                        NAMESPACE
 *         cluster-1                       cluster-1                       cluster-1                       namespace-1
+```
+
+### Get logs for a pod
+
+1. use `suich logs`
+2. select namespace from prompt and selected namespace will be set as default namespace.
+3. if you do not have access to fetch the namespaces, use `suich logs -n <namespace>`
+4. if you want to watch the logs, use `suich logs -f`
+
+```console
+$ suich logs -n <namespace>
+Use the arrow keys to navigate: ↓ ↑ → ←
+? Select Pod:
+    default
+  ▸ pod-1
+    pod-2
+    pod-3
+↓   pod-4
+
+<logs>
 ```

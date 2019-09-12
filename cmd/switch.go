@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/a8uhnf/suich/pkg/utils"
 	"github.com/ghodss/yaml"
-	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func SwitchCmd() *cobra.Command {
 				log.Fatalln(err)
 			}
 
-			selectedCtx, err := runPrompt(ctxs)
+			selectedCtx, err := utils.RunPrompt(ctxs, "Select Context")
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -103,20 +103,4 @@ type KubectlUser struct {
 	Password              string `json:"password,omitempty"`
 	Username              string `json:"username,omitempty"`
 	Token                 string `json:"token,omitempty"`
-}
-
-func runPrompt(ctxs []string) (string, error) {
-	list := []string{}
-	for _, v := range ctxs {
-		list = append(list, v)
-	}
-	prompt := promptui.Select{
-		Label: "Select context",
-		Items: list,
-	}
-	_, res, err := prompt.Run()
-	if err != nil {
-		return "", nil
-	}
-	return res, nil
 }
