@@ -69,10 +69,6 @@ func getLogs(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	follow, err := cmd.Flags().GetBool("follow")
-	if err != nil {
-		return err
-	}
 	if follow {
 		if err := utils.ExecCommand(os.Stdout, "kubectl", "logs", pod, "-n", namespace, "-f"); err != nil {
 			return err
