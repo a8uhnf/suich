@@ -27,7 +27,7 @@ func PortForward() *cobra.Command {
 			if err != nil {
 				panic(err)
 			}
-			n, err := runPrompt(nList)
+			n, err := utils.RunPrompt(nList, "Select Namespace")
 			if err != nil {
 				panic(err)
 			}
@@ -36,7 +36,7 @@ func PortForward() *cobra.Command {
 			if err != nil {
 				panic(err)
 			}
-			p, err := runPrompt(pList)
+			p, err := utils.RunPrompt(pList, "Select Pod")
 			if err != nil {
 				panic(err)
 			}
