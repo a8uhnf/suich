@@ -3,8 +3,10 @@ package cmd
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/a8uhnf/suich/pkg/utils"
 	"github.com/spf13/cobra"
@@ -34,6 +36,8 @@ func GetLogsCmd() *cobra.Command {
 
 func getLogs(cmd *cobra.Command, args []string) error {
 
+	second()
+	return nil
 	client := getKubernetesClient()
 
 	var namespace string
@@ -80,6 +84,13 @@ func getLogs(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+func second() {
+	loc := time.FixedZone("some_common_name", 6*60*60)
+	tp := time.Date(1970, 1, 1, 0, 0, 0, 0, loc)
+	ts := time.Now().Sub(tp)
+	fmt.Printf("%v", ts)
 }
 
 func readAllPods(out bytes.Buffer) []string {

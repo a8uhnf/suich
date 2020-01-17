@@ -33,6 +33,15 @@
   name = "k8s.io/apimachinery"
   version = "kubernetes-1.11.0"
 
+[[override]]
+  name = "github.com/chzyer/readline"
+  branch = "master"
+
+[[override]]
+  name = "k8s.io/api"
+  version = "kubernetes-1.11.0"
+
+
 [prune]
   go-tests = true
   unused-packages = true

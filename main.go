@@ -10,5 +10,7 @@ func main() {
 	flag.Parse()
 
 	c := cmd.RootCmd()
-	c.Execute()
+	if err := c.Execute(); err != nil {
+		panic(err)
+	}
 }

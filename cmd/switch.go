@@ -2,33 +2,51 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 
-	"github.com/a8uhnf/suich/pkg/utils"
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
+
+	go_prompt "github.com/c-bata/go-prompt"
+
+	"github.com/a8uhnf/suich/pkg/utils"
 )
 
 var kubeConfigPath = filepath.Join(os.Getenv("HOME"), ".kube", "config")
+var prompt bool
 
 func SwitchCmd() *cobra.Command {
-	return &cobra.Command{
+	cc := &cobra.Command{
 		Use:   "switch",
 		Short: "To switch context use this command",
+		PreRun: func(cmd *cobra.Command, args []string) {
+			if prompt {
+				fmt.Println("-------------")
+			}
+		},
 		Run: func(cmd *cobra.Command, args []string) {
+			var selectedCtx string
 			log.Println("Starting reading config file....")
 			ctxs, err := readKubeConfigFile()
 			if err != nil {
 				log.Fatalln(err)
 			}
-
-			selectedCtx, err := utils.RunPrompt(ctxs, "Select Context")
-			if err != nil {
-				log.Fatalln(err)
+			if !prompt {
+				selectedCtx, err = utils.RunPrompt(ctxs, "Select Context")
+				if err != nil {
+					log.Fatalln(err)
+				}
+			} else {
+				sugges := []go_prompt.Suggest{}
+				for _, k := range ctxs {
+					sugges = append(sugges, go_prompt.Suggest{k, ""})
+				}
+				go_prompt.New(executor, completer)
 			}
 
 			c := exec.Command("kubectl", "config", "use-context", selectedCtx)
@@ -40,6 +58,16 @@ func SwitchCmd() *cobra.Command {
 			}
 		},
 	}
+	cc.Flags().BoolVarP(&prompt, "prompt", "p", false, "run switch in prompt mode")
+	return cc
+}
+func executor(in string) {
+	fmt.Println(in)
+}
+
+func completer(go_prompt.Document) []go_prompt.Suggest {
+
+	return []go_prompt.Suggest{}
 }
 
 // readKubeConfigFile reads kubeconfig and return context list
