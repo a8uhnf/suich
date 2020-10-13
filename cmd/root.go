@@ -39,5 +39,6 @@ func RootCmd() *cobra.Command {
 	cmds.AddCommand(GCPConfigSwitch())
 	cmds.AddCommand(SuichNamespaceCMD())
 	cmds.AddCommand(GetLogsCmd())
+	cmds.AddCommand(patch())
 	return cmds
 }

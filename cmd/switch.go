@@ -19,6 +19,7 @@ import (
 
 var kubeConfigPath = filepath.Join(os.Getenv("HOME"), ".kube", "config")
 var prompt bool
+var suggestions []go_prompt.Suggest
 
 func SwitchCmd() *cobra.Command {
 	cc := &cobra.Command{
@@ -26,7 +27,7 @@ func SwitchCmd() *cobra.Command {
 		Short: "To switch context use this command",
 		PreRun: func(cmd *cobra.Command, args []string) {
 			if prompt {
-				fmt.Println("-------------")
+				fmt.Println("type cluster name")
 			}
 		},
 		Run: func(cmd *cobra.Command, args []string) {
@@ -41,20 +42,20 @@ func SwitchCmd() *cobra.Command {
 				if err != nil {
 					log.Fatalln(err)
 				}
-			} else {
-				sugges := []go_prompt.Suggest{}
-				for _, k := range ctxs {
-					sugges = append(sugges, go_prompt.Suggest{k, ""})
+				c := exec.Command("kubectl", "config", "use-context", selectedCtx)
+				var out bytes.Buffer
+				c.Stdout = &out
+				err = c.Run()
+				if err != nil {
+					log.Fatalln(err)
 				}
-				go_prompt.New(executor, completer)
-			}
-
-			c := exec.Command("kubectl", "config", "use-context", selectedCtx)
-			var out bytes.Buffer
-			c.Stdout = &out
-			err = c.Run()
-			if err != nil {
-				log.Fatalln(err)
+			} else {
+				for _, k := range ctxs {
+					suggestions = append(suggestions, go_prompt.Suggest{Text: k})
+				}
+				suggestions = append(suggestions, go_prompt.Suggest{Text: "exit"})
+				p := go_prompt.New(executor, completer)
+				p.Run()
 			}
 		},
 	}
@@ -62,12 +63,25 @@ func SwitchCmd() *cobra.Command {
 	return cc
 }
 func executor(in string) {
-	fmt.Println(in)
+	if in == "exit" {
+		fmt.Println("bye!!!")
+		os.Exit(0)
+	} else if in != "" {
+		c := exec.Command("kubectl", "config", "use-context", in)
+		var out bytes.Buffer
+		c.Stdout = &out
+		err := c.Run()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		os.Exit(0)
+	}
 }
 
-func completer(go_prompt.Document) []go_prompt.Suggest {
+func completer(doc go_prompt.Document) []go_prompt.Suggest {
+	c := doc.GetWordBeforeCursor()
 
-	return []go_prompt.Suggest{}
+	return go_prompt.FilterContains(suggestions, c, true)
 }
 
 // readKubeConfigFile reads kubeconfig and return context list
